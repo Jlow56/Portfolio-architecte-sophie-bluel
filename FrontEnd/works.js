@@ -34,7 +34,7 @@ function createWork(work) {
 }
   
 /************ Fonction qui affiche les travaux ************/
-function displayWorks(works) {
+export function displayWorks(works) {
   const divGallery = document.querySelector(".gallery");
   divGallery.innerHTML = "";
   // boucle pour afficher les travaux à partir de mon tableau works

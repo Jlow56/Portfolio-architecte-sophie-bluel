@@ -1,4 +1,4 @@
-import { getWorks } from './works.js'; // Importe la fonction getWorks depuis works.js
+import { getWorks,displayWorks } from './works.js'; // Importe la fonction getWorks depuis works.js
 /************ Lancement du code ************/
 document.addEventListener("DOMContentLoaded", async () => {
   await init();

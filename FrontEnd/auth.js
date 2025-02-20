@@ -9,10 +9,11 @@ document.addEventListener("DOMContentLoaded", function () {
     //     return emailRegex.test(email);
     // }
 
+    
     // Validation complète des champs
     function validateForm() {
         // let isEmailValid = emailInput.value.trim() !== "" && isValidEmail(emailInput.value);
-        let isEmailValid = emailInput.value.trim();
+        let isEmailValid = emailInput.value.trim() !== "";
         let isPasswordValid = passwordInput.value.trim() !== "";
 
         if (!isEmailValid && !isPasswordValid) {
@@ -47,7 +48,7 @@ document.addEventListener("DOMContentLoaded", function () {
     form.addEventListener("submit", async (event) => {
         event.preventDefault();
         if (validateForm()) {
-            await authPost(emailInput.value.trim(), passwordInput.value.trim());
+            await authPost();
         }
     });
 
