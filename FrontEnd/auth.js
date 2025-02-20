@@ -1,65 +1,59 @@
+document.addEventListener("DOMContentLoaded", function () {
+    const form = document.querySelector(".form-login");
+    const emailInput = document.getElementById("email");
+    const passwordInput = document.getElementById("password");
 
-async function handeleLogin() {
-    const form = document.getElementById("login-form");
-    
-    document.getElementById("login").addEventListener("click", async (event) => {
-        event.preventDefault();// Empêche le rechargement de la page
-        
-        const email = document.getElementById("email").value.trim();
-        const password = document.getElementById("password").value.trim();
+    // Vérifie si l'email a un format valide
+    // function isValidEmail(email) {
+    //     let emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    //     return emailRegex.test(email);
+    // }
 
-        if (!email || !password) {
-            alert("Veuillez remplir tous les champs");
-            return;
-        }
+    // Validation complète des champs
+    function validateForm() {
+        // let isEmailValid = emailInput.value.trim() !== "" && isValidEmail(emailInput.value);
+        let isEmailValid = emailInput.value.trim();
+        let isPasswordValid = passwordInput.value.trim() !== "";
 
-        if (!emailRegex(email)) {
-            alert("Veuillez entrer un email valide");
-            return;
-        }
-    });
-    async function authPost() {
-        let token;
-        const response = await fetch("http://localhost:5678/api/users/login", {
-            method: "POST",
-            headers: {"Content-Type": "application/json"},
-            body: JSON.stringify( {
-                email: "email",
-                password: "password",
-            }), 
-        });
-        
-        if (response.status === 200) {
-            const data = await response.json();
-            localStorage.setItem("token", data.token);
-            window.location.href = "index.html";
-        } else {
-            window.alert("Erreur dans l’identifiant ou le mot de passe");
+        if (!isEmailValid && !isPasswordValid) {
+            window.alert("Erreur dans l’identifiant ou le mot de passe.");
+            return false; 
         }
     }
 
+    // Fonction pour envoyer la requête de connexion
+    async function authPost(email, password) {
+        try {
+            const response = await fetch("http://localhost:5678/api/users/login", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ email, password }),
+            });
 
-    function validateInput(input) {
-       if (input.value === "" || input.value === null) {
-            alert("Veuillez remplir tous les champs");
-            InputEvent.classList.add("error");
-        } else {
-            input.classList.remove("error");
-        }   
+            if (response.ok) { // Correction de la condition incorrecte
+                const data = await response.json();
+                localStorage.setItem("token", data.token);
+                window.location.href = "index.html"; // Redirige vers l'accueil
+            } else {
+                alert("Erreur dans l’identifiant ou le mot de passe.");
+            }
+        } catch (error) {
+            console.error("Erreur lors de la connexion :", error);
+            alert("Une erreur est survenue, veuillez réessayer plus tard.");
+        }
     }
 
-    form.addEventListener("submit", (event) => {
+    // Gère la soumission du formulaire
+    form.addEventListener("submit", async (event) => {
         event.preventDefault();
-        validateInput(email);
-        validateInput(password);
+        if (validateForm()) {
+            await authPost(emailInput.value.trim(), passwordInput.value.trim());
+        }
     });
 
-    form.addEventListener("change",  () => {
-        validateInput(email);
-        validateInput(password);
+    // Supprime les erreurs en temps réel
+    form.addEventListener("input", () => {
+        if (emailInput.value.trim()) emailInput.classList.remove("error");
+        if (passwordInput.value.trim()) passwordInput.classList.remove("error");
     });
-     function emailRegex(email) {
-        let emailRegex = new RegExp("[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]+");
-    } 
-}
-
+});

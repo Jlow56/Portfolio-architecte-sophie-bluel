@@ -269,6 +269,9 @@ input[type="submit"] {
 	text-decoration: underline;
 }
 
+.error {
+	box-shadow: 0px 4px 14px red;
+}
 
 /************ footer ************/
 footer {
