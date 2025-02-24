@@ -4,22 +4,21 @@ document.addEventListener("DOMContentLoaded", function () {
     const passwordInput = document.getElementById("password");
 
     // Vérifie si l'email a un format valide
-    // function isValidEmail(email) {
-    //     let emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-    //     return emailRegex.test(email);
-    // }
+    function isValidEmail(email) {
+        let emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        return emailRegex.test(email);
+    }
 
-    
     // Validation complète des champs
     function validateForm() {
-        // let isEmailValid = emailInput.value.trim() !== "" && isValidEmail(emailInput.value);
-        let isEmailValid = emailInput.value.trim() !== "";
+        let isEmailValid = emailInput.value.trim() !== "" && isValidEmail(emailInput.value);
         let isPasswordValid = passwordInput.value.trim() !== "";
 
-        if (!isEmailValid && !isPasswordValid) {
+        if (!isEmailValid || !isPasswordValid) {
             window.alert("Erreur dans l’identifiant ou le mot de passe.");
             return false; 
         }
+        return true;
     }
 
     // Fonction pour envoyer la requête de connexion
@@ -31,14 +30,16 @@ document.addEventListener("DOMContentLoaded", function () {
                 body: JSON.stringify({ email, password }),
             });
 
-            if (response.ok) { // Correction de la condition incorrecte
+            if (response.ok) {
                 const data = await response.json();
                 localStorage.setItem("token", data.token);
-                window.location.href = "index.html"; // Redirige vers l'accueil
+                console.log(localStorage);
+                window.location.href = "index.html";  //Redirige vers l'accueil
             } else {
                 alert("Erreur dans l’identifiant ou le mot de passe.");
             }
-        } catch (error) {
+        } 
+        catch (error) {
             console.error("Erreur lors de la connexion :", error);
             alert("Une erreur est survenue, veuillez réessayer plus tard.");
         }
@@ -48,13 +49,7 @@ document.addEventListener("DOMContentLoaded", function () {
     form.addEventListener("submit", async (event) => {
         event.preventDefault();
         if (validateForm()) {
-            await authPost();
+            await authPost(emailInput.value.trim(), passwordInput.value.trim());
         }
-    });
-
-    // Supprime les erreurs en temps réel
-    form.addEventListener("input", () => {
-        if (emailInput.value.trim()) emailInput.classList.remove("error");
-        if (passwordInput.value.trim()) passwordInput.classList.remove("error");
     });
 });

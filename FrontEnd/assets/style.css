@@ -138,14 +138,21 @@ li:hover {
 }
 #portfolio h2 {
 	text-align: center;
-	margin-bottom: 1em;
+}
+
+.title-modale {
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+    align-items: center;
+	gap: 30px;
 }
 
 .btn-filters {
 	display: flex;
 	justify-content: center;
 	padding-bottom: 50px;
-		
+	margin-top: 1rem;
 }
 
 .btn-filters  button {
@@ -164,6 +171,11 @@ li:hover {
 	background-color: #1D6154;
 	color: white;
 }
+
+.fa-solid .fa-pen-to-square {
+	color: #000000;
+}
+
 .gallery {
 	width: 100%;
 	display: grid;
@@ -174,7 +186,6 @@ li:hover {
 
 .gallery img {
 	width: 100%;
-
 }
 
 figcaption {

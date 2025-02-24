@@ -16,7 +16,7 @@ export async function getWorks() {
   const response = await fetch("http://localhost:5678/api/works"); 
   works = await response.json();// Convertit la réponse en JSON (tableau d'objets)
   window.localStorage.setItem("works", JSON.stringify(works)); // Stocke les travaux en cache pour éviter les appels API inutiles
-} else {
+  } else {
     works = JSON.parse(works); // Convertit la chaîne JSON stockée en objet JavaScript
   }
   return works;
