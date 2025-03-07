@@ -1,4 +1,5 @@
-import { getWorks, displayWorks } from "./works.js"; // Importe la fonction getWorks depuis works.js
+import { getWorks, displayWorks } from "./works.js";
+import { isUserAuthenticated } from "./modale.js"; 
 /************ Lancement du code ************/
 document.addEventListener("DOMContentLoaded", async () => {
   await init();
@@ -11,28 +12,18 @@ async function init() {
   btnFiltersEvents(); // Ajoute les événements aux boutons
   filterWorks("Tous"); // Affiche tous les travaux par défaut
   updateLoginLogoutLink(); // Met à jour le lien de connexion/déconnexion
-}
-
-/************ Vérifier si l'utilisateur est authentifié  ************/
-function isUserAuthenticated() {
-  return localStorage.getItem("token") !== null;
+ 
 }
 
 /************ Récupérer les catégories ************/
-async function getCategories() {
-  let categories = localStorage.getItem("categories");
-  if (!categories) {
-    const response = await fetch("http://localhost:5678/api/categories");
-    categories = await response.json();
-    localStorage.setItem("categories", JSON.stringify(categories));
-  } else {
-    categories = JSON.parse(categories);
-  }
+export async function getCategories() {
+  const response = await fetch("http://localhost:5678/api/categories");
+  let categories = await response.json();
   return categories;
 }
 
 /************ Nettoyer le nom de la catégorie ************/
-function regexFilter(name) {
+export function regexFilter(name) {
   return `btn-${name
     .replace(/\s+/g, "-") // Remplace les espaces par des tirets
     .replace(/[^a-zA-Z0-9-]/g, "") // Supprime caractères spéciaux sauf -
@@ -47,25 +38,9 @@ function createBtn(categorie) {
   return btn;
 }
 
-/************ creation du lien vers la modale ************/
-function createlinkModale() {
-  if (isUserAuthenticated()) {
-    const linkModale = document.createElement("a");
-    linkModale.classList.add("btn-open-modale");
-    linkModale.href = "#";
-    linkModale.innerHTML = `
-      <i class="fa-solid fa-pen-to-square"></i>
-      Modifier
-    `;
-    return linkModale;
-  }
-  return null; 
-}
-
 /************ Mettre à jour le lien de connexion/déconnexion ************/
 function updateLoginLogoutLink() {
   const loginLink = document.querySelector('nav ul li a[href="login.html"]');
-
   if (isUserAuthenticated()) {
     const logoutLink = loginLink.cloneNode(true);
     logoutLink.textContent = "Logout";
@@ -123,10 +98,6 @@ function displayButtons(categories) {
       const btn = createBtn(categorie);
       divBtnFilter.appendChild(btn);
     });
-  } else {
-    const divTitle = document.querySelector(".title-modale");
-    const linkModale = createlinkModale();
-    divTitle.appendChild(linkModale);
   }
   filterWorks("Tous"); // Affiche tous les travaux par défaut
 }

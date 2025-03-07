@@ -15,7 +15,14 @@
 </head>
 <body>
 <header>
-	<h1>Sophie Bluel <span>Architecte d'intérieur</span></h1>
+	<div class="edit-header" style="display: none;">
+		<a class="btn-open-modale" href=""> 
+			<i class="fa-solid fa-pen-to-square"></i>
+			<p>Mode édition</p>	
+		</a>
+	</div> 
+	<div class="header-title-nav">
+		<h1>Sophie Bluel <span>Architecte d'intérieur</span></h1>
 	<nav>
 		<ul>
 			<li>projets</li>
@@ -23,9 +30,10 @@
 			<li>
 				<a href="login.html">login</a>
 			</li>
-			<li><img src="./assets/icons/instagram.png" alt="Instagram"></li>
+			<li><img class="instagram-logo" src="./assets/icons/instagram.png" alt="Instagram"></li>
 		</ul>
 	</nav>
+	</div>
 </header>
 <main>
 	<section id="introduction">
@@ -39,12 +47,59 @@
 			<p>En cas de besoin, une équipe pluridisciplinaire peut-être constituée : architecte DPLG, décorateur(trice)</p>
 		</article>
 	</section>
+	<section class="modales" style="display: none;" aria-hidden="true">
+		<aside id="modale-1" class="modale" role="dialog" aria-labelledby="titlemodal" style="display: none;" aria-hidden="true">
+			<div class="modal-wrapper m1">
+				<div class="header-modale">
+					<div class="modale-buttons">
+						<i class="fa-solid fa-xmark close-modale"></i></button>
+					</div>
+					<h2 class=" h2-modal">Galerie photo</h2>
+				</div>
+				<div class="gallery-modale"></div>
+				<div class="footer-modale">
+					<button class="btn-green-white btn-open-modale2">Ajouter une photo</button>
+				</div>
+			</div>
+		</aside>
+		<aside id="modale-2" class="modale" role="dialog" aria-labelledby="titlemodal" style="display: none;" aria-hidden="true">
+			<div class="modal-wrapper m2">
+				<div class="header-modale">
+					<div class="modale-buttons">
+						<i class="fa-solid fa-arrow-left back"></i>
+						<i class="fa-solid fa-xmark close-modale"></i></button>
+					</div>
+					<h2 class="h2-modal">Ajout photo</h2>
+				</div>
+				<div class="main-modale">
+					<div class="add-photo">
+						<div class="img-icone">
+							<i class="fa-solid fa-image"></i>
+						</div>
+						<form class="add-photo-form" action="">
+							<input type="file" id="file"  name="file" accept="image/png, image/jpeg" required>
+						</form>
+						<p class="picture-format">jpg, png : 4mo max </p>
+					</div>
+					<div class="modale-form-container">
+						<form class="modale-form" action="#" method="post">
+							<label for="title">Titre</label>
+							<input type="text" name="title" id="title" required>
+							<label for="category">Catégorie</label>
+							<select name="category" id="category" required> <!--option value générée en js--> </select>
+						</form>	
+					</div>
+				</div>			
+				<button class="btn-display-none validate">Valider</button>
+			</div>
+		</aside>
+	</section>
 	<section id="portfolio">
 		<div class="title-modale">
 			<h2>Mes Projets</h2>
 		</div>
-		<div class="btn-filters"></div>
-		<div class="gallery"></div>
+		<div class="btn-filters"> <!--boutons générés en js avec les catégories dans bouttons.js ou modifier la gallerie si connecté--> </div>
+		<div class="gallery"> <!--Galerie générée en js dans works.js --></div>
 	</section>
 	<section id="contact">
 		<h2>Contact</h2>
@@ -56,7 +111,7 @@
 			<input type="email" name="email" id="email">
 			<label for="message">Message</label>
 			<textarea name="message" id="message" cols="30" rows="10"></textarea>
-			<input type="submit" value="Envoyer">
+			<input class="btn-green-white" type="submit" value="Envoyer">
 		</form>
 	</section>
 </main>
@@ -69,5 +124,6 @@
 </footer>
 <script type="module" src="works.js"></script>
 <script type="module" src="buttons.js"></script>
+<script type="module" src="modale.js"></script>
 </body>
 </html>

@@ -11,14 +11,8 @@ async function init() { // Récupère les travaux depuis l'API ou le cache
   
 /************ Fonction qui récupère l'API des works ou le cache ************/
 export async function getWorks() {
-  let works = window.localStorage.getItem("works");  // Vérifie si les données sont déjà stockées localement
-  if (works === null) { // Si les travaux ne sont pas en cache, appel API pour les récupérer
   const response = await fetch("http://localhost:5678/api/works"); 
-  works = await response.json();// Convertit la réponse en JSON (tableau d'objets)
-  window.localStorage.setItem("works", JSON.stringify(works)); // Stocke les travaux en cache pour éviter les appels API inutiles
-  } else {
-    works = JSON.parse(works); // Convertit la chaîne JSON stockée en objet JavaScript
-  }
+  let  works = await response.json();// Convertit la réponse en JSON (tableau d'objets)
   return works;
 }
   
@@ -29,7 +23,6 @@ function createWork(work) {
   figure.innerHTML = `  
   <img src="${work.imageUrl}" alt="${work.title}">
   <figcaption>${work.title}</figcaption>`;
-  
   return figure;
 }
   
