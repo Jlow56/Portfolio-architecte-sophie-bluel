@@ -47,14 +47,14 @@
 			<p>En cas de besoin, une équipe pluridisciplinaire peut-être constituée : architecte DPLG, décorateur(trice)</p>
 		</article>
 	</section>
-	<section class="modales" style="display: none;" aria-hidden="true">
-		<aside id="modale-1" class="modale" role="dialog" aria-labelledby="titlemodal" style="display: none;" aria-hidden="true">
-			<div class="modal-wrapper m1">
+	<section class="modales" style="display: none;" aria-hidden="true" role="dialog" aria-labelledby="titlemodale">
+		<aside id="modale-1" class="modale" role="dialog" aria-labelledby="titlemodale" style="display: none;" aria-hidden="true">
+			<div class="modale-wrapper m1">
 				<div class="header-modale">
 					<div class="modale-buttons">
 						<i class="fa-solid fa-xmark close-modale"></i></button>
 					</div>
-					<h2 class=" h2-modal">Galerie photo</h2>
+					<h2 class=" h2-modale">Galerie photo</h2>
 				</div>
 				<div class="gallery-modale"></div>
 				<div class="footer-modale">
@@ -62,35 +62,38 @@
 				</div>
 			</div>
 		</aside>
-		<aside id="modale-2" class="modale" role="dialog" aria-labelledby="titlemodal" style="display: none;" aria-hidden="true">
-			<div class="modal-wrapper m2">
+		<aside id="modale-2" class="modale" role="dialog" aria-labelledby="titlemodale" style="display: none;" aria-hidden="true">
+			<div class="modale-wrapper m2">
 				<div class="header-modale">
-					<div class="modale-buttons">
+					<div class="modale-buttons btns-m2">
 						<i class="fa-solid fa-arrow-left back"></i>
 						<i class="fa-solid fa-xmark close-modale"></i></button>
 					</div>
-					<h2 class="h2-modal">Ajout photo</h2>
+					<h2 class="h2-modale">Ajout photo</h2>
 				</div>
 				<div class="main-modale">
 					<div class="add-photo">
 						<div class="img-icone">
 							<i class="fa-solid fa-image"></i>
 						</div>
-						<form class="add-photo-form" action="">
+						<form class="add-photo-form" action="#" method="post">
+							<label for="file" class="label-file">Ajouter photo</label>
 							<input type="file" id="file"  name="file" accept="image/png, image/jpeg" required>
 						</form>
 						<p class="picture-format">jpg, png : 4mo max </p>
 					</div>
 					<div class="modale-form-container">
-						<form class="modale-form" action="#" method="post">
+						<form class="data-form" action="#" method="post">
 							<label for="title">Titre</label>
 							<input type="text" name="title" id="title" required>
 							<label for="category">Catégorie</label>
 							<select name="category" id="category" required> <!--option value générée en js--> </select>
 						</form>	
 					</div>
+				</div>
+				<div class="footer-modale">
+					<button class="btn-display-none validate" disabled>Valider</button>
 				</div>			
-				<button class="btn-display-none validate">Valider</button>
 			</div>
 		</aside>
 	</section>

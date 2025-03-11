@@ -1,5 +1,5 @@
 import { getWorks, displayWorks } from "./works.js";
-import { isUserAuthenticated } from "./modale.js"; 
+import { isUserAuthenticated } from "./modale.js";
 /************ Lancement du code ************/
 document.addEventListener("DOMContentLoaded", async () => {
   await init();
@@ -12,7 +12,6 @@ async function init() {
   btnFiltersEvents(); // Ajoute les événements aux boutons
   filterWorks("Tous"); // Affiche tous les travaux par défaut
   updateLoginLogoutLink(); // Met à jour le lien de connexion/déconnexion
- 
 }
 
 /************ Récupérer les catégories ************/
@@ -57,7 +56,7 @@ function updateLoginLogoutLink() {
 
 /************ Gérer les événements des boutons filters ************/
 async function btnFiltersEvents() {
-  if (!(isUserAuthenticated())){
+  if (!isUserAuthenticated()) {
     const categories = await getCategories();
     // Gestion du bouton "Tous" pour afficher tous les travaux sans filtre de catégorie
     document.querySelector(".btn-tous").addEventListener("click", () => {
@@ -86,14 +85,14 @@ async function filterWorks(categoryName) {
 
 /************ Afficher les boutons ************/
 function displayButtons(categories) {
-  if (!(isUserAuthenticated())){
+  if (!isUserAuthenticated()) {
     const divBtnFilter = document.querySelector(".btn-filters");
     divBtnFilter.innerHTML = "";
-  
+
     const btnAll = createBtn({ name: "Tous" });
     btnAll.classList.add("btn-tous");
     divBtnFilter.appendChild(btnAll);
-  
+
     categories.forEach((categorie) => {
       const btn = createBtn(categorie);
       divBtnFilter.appendChild(btn);
@@ -101,6 +100,3 @@ function displayButtons(categories) {
   }
   filterWorks("Tous"); // Affiche tous les travaux par défaut
 }
-
-
-
