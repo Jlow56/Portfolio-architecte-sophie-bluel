@@ -281,7 +281,6 @@ figcaption {
 /*--Général--*/
 .modale {
 	position: fixed;
-    display: flex;
     align-items: center;
     justify-content: center;
     top: 0;
@@ -328,6 +327,15 @@ i.fa-solid.fa-xmark.close-modale {
     font-size: 20px;
     display: flex;
     align-items: center;
+}
+
+.footer-modale {
+	width: 420px;
+	height: 18%;
+    display: flex;
+    align-items: center;
+	justify-content: center;
+    border-top: 1px solid #B3B3B3;
 }
 
 /*-- Header --*/
@@ -405,13 +413,7 @@ i.fa-sharp.fa-solid.fa-trash-can {
 	padding-bottom: 0.5px;
 }
 
-.footer-modale {
-	width: 420px;
-	height: 18%;
-    display: flex;
-    align-items: center;
-    border-top: 1px solid #B3B3B3;
-}
+
 
 .h2-modale {
 	display: flex;
@@ -454,6 +456,14 @@ i.fa-sharp.fa-solid.fa-trash-can {
     align-items: center;
     justify-content: center;
 	gap: 10px;
+}
+
+img.img-preview {
+    height: auto;
+    width: 129px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .img-icone {
@@ -532,6 +542,19 @@ input#title {
 	line-height: 16.42px;
 	padding-left: 10px;
 }
+/*footer*/
+.btn-submit-modal-form {
+	font-family: 'Work Sans';
+    font-weight: 700;
+    color: white;
+    background-color: #A7A7A7;
+    margin: 2em auto;
+    width: 180px;
+    height: 36px;
+    text-align: center;
+    border-radius: 60px;
+    border-style: none;
+}
 
 /************ footer ************/
 footer {
@@ -594,18 +617,6 @@ footer nav ul {
     border-style: none;
 }
 
-.btn-display-none {
-	font-family: 'Work Sans';
-    font-weight: 700;
-    color: white;
-    background-color: #A7A7A7;
-    margin: 2em auto;
-    width: 180px;
-    height: 36px;
-    text-align: center;
-    border-radius: 60px;
-    border-style: none;
-}
 
 .a-password {
 	font-family: 'Work Sans';

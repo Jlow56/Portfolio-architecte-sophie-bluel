@@ -37,4 +37,9 @@ export function displayWorks(works) {
   });
 }
 
+export async function updateWorks() {
+  let works = await getWorks();
+  displayWorks(works);
+} 
+
 
