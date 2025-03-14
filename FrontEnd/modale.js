@@ -7,23 +7,34 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 /*** Centralisation des sélections DOM ***/
 const domElements = {
-  btnEdit: document.querySelector(".edit-header"), /*div contenant le lien d'édition dans le header  pour ouvrir la modale créé en js*/
-  divTitle: document.querySelector(".title-modale"), /* div contenant le lien  d'édition avec le titre h2 mes projets pour ouvrir la modale créé en js*/
-  modales: document.querySelector(".modales"), /*section contenant les modales*/
-  modale1: document.getElementById("modale-1"), /* aside modale 1 */
-  modale2: document.getElementById("modale-2"), /* aside modale 2 */
-  galleryModale: document.querySelector(".gallery-modale"), /* galerie pphoto de la modale 1 */
-  photoContainer: document.querySelector(".photo-container"), /* div qui contient la photo en prewiew de la modale 2*/ 
-  imgIcone: document.querySelector(".img-icone"), /*icone image lorsqu'une image n'est pas choisie modale 2*/
-  photoFile: document.getElementById("file"), /* input file modale 2  ajouter une photo */
-  addPhotoForm: document.querySelector(".add-photo-form"), /*form ajouter une photo modale 2*/
-  dataForm: document.querySelector(".data-form"), /*form modale 2*/ 
-  pictureFormat: document.querySelector(".picture-format"), /*paragraph format de la photo modale 2*/
-  categorySelect: document.querySelector("#category"),  /*select modale 2*/
-  modaleForm: document.querySelector(".modale-form-container"), /*div qui contient le 2ème form modale 2*/
- 
-  btnAddPicture: document.querySelector(".btn-add-picture"), /*bouton ajouter une photo modale 2*/
+  /*** Boutons ouvrir modales1 ***/
   btnModale1: document.querySelector(".btn-open-modale1"), /*bouton ouvrir modale 1*/
+  // ***Header***//
+  btnEdit: document.querySelector(".edit-header"), /*div contenant le lien d'édition dans le header  pour ouvrir la modale créé en js*/
+  // ***Main Portfolio***//
+  divTitle: document.querySelector(".title-modale"), /* div contenant le lien  d'édition avec le titre h2 mes projets pour ouvrir la modale créé en js*/
+  /*** Section des modales */
+  modales: document.querySelector(".modales"), /*section contenant les modales*/
+  // ***Modale-1 ***//
+  modale1: document.getElementById("modale-1"), /* aside modale 1 */
+  galleryModale: document.querySelector(".gallery-modale"), /* galerie pphoto de la modale 1 */
+
+  // ***Modale-2 ***//
+  modale2: document.getElementById("modale-2"), /* aside modale 2 */
+  imgIcone: document.querySelector(".img-icone"), /*icone image lorsqu'une image n'est pas choisie modale 2*/
+  pictureFormat: document.querySelector(".picture-format"), /*paragraph format de la photo modale 2*/
+  imgPrewiew: document.querySelector(".img-preview"), /*image preview modale 2*/
+  /* -Divs modale 2- */
+  divPhotoContainer: document.querySelector(".photo-container"), /* div qui contient la photo en prewiew de la modale 2*/ 
+  /* -Form modale 2- */
+  // form1
+  addPhotoForm: document.querySelector(".add-photo-form"), /*form ajouter une photo modale 2*/
+  inputPhotoFile: document.getElementById("file"), /* input file modale 2  ajouter une photo */
+  labelFile: document.querySelector(".label-file"), /* label ajouter une photo modale 2*/
+  // form2
+  modaleForm: document.querySelector(".modale-form-container"), /*div qui contient le 2ème form modale 2*/
+  dataForm: document.querySelector(".data-form"), /*form modale 2*/ 
+  categorySelect: document.querySelector("#category"),  /*select modale 2*/
 };
 
 async function initializeApp() {
@@ -222,26 +233,14 @@ function backToModale1() {
   });
 }
 
-// /**
-//  * 
-//  */
-// function hideElementsIfPicture() {
-//   [
-//     domElements.imgIcone,
-//     domElements.addPhotoForm,
-//     domElements.pictureFormat,
-//   ].forEach((element) => (element.style.display = "none"));
-// }
-
-
 /**
  * @description Fonction pour prévisualiser l'image sélectionnée
  * @param {string} workId - L'ID du travail
  * @returns {void}
  */
 function previewPicture() {
-  domElements.photoFile.addEventListener("change", () => {
-    const file = domElements.photoFile.files[0];
+  domElements.inputPhotoFile.addEventListener("change", () => {
+    const file = domElements.inputPhotoFile.files[0];
     
     if (!file) return;
 
@@ -249,14 +248,15 @@ function previewPicture() {
     
     const reader = new FileReader();
     reader.onload = () => {
-      domElements.photoContainer.innerHTML = "";
+      domElements.divPhotoContainer.innerHTML = "";
+      domElements.divPhotoContainer.style.display = "flex";
       domElements.imgIcone.style.display = "none";
       domElements.addPhotoForm.style.display = "none";
       domElements.pictureFormat.style.display = "none";
       const img = document.createElement("img");
       img.src = reader.result;
       img.classList.add("img-preview");
-      domElements.photoContainer.appendChild(img);
+      domElements.divPhotoContainer.appendChild(img);
     };
     reader.readAsDataURL(file);
   });
@@ -286,50 +286,65 @@ async function displayOptions() {
   let categories = await getCategories();
   domElements.categorySelect.innerHTML = `<option value="default"></option>` + 
   categories.map(category => `<option value="${category.name}">${category.name}</option>`).join("");
-  // categories.map(createOption).join("");
 }
-
-
 
 /**
  * @description Réinitialise le formulaire
  */
 function resetForm() {
-  domElements.dataForm.reset();
-  domElements.addPhotoForm.reset();
-  domElements.categorySelect.value = "default";
-  domElements.imgIcone.innerHTML = '<i class="fa-solid fa-image"></i>'; // Réaffiche l'icône
+  if (domElements.dataForm) domElements.dataForm.reset();
+  if (domElements.addPhotoForm) domElements.addPhotoForm.reset();
+  if (domElements.categorySelect) domElements.categorySelect.value = "default";
+  if (domElements.imgIcone) domElements.imgIcone.innerHTML = '<i class="fa-solid fa-image"></i>';
+
+  if (domElements.divPhotoContainer) domElements.divPhotoContainer.style.display = "none";
+  if  (domElements.imgPrewiew) {
+    domElements.imgPrewiew.remove();
+    domElements.imgPrewiew.removeAttribute("src");
+  }
+  
+
+  if (domElements.imgIcone) domElements.imgIcone.style.display = "flex";
+  if (domElements.addPhotoForm) domElements.addPhotoForm.style.display = "flex";
+  if (domElements.pictureFormat) domElements.pictureFormat.style.display = "flex";
 }
 
 /**
  *@description Vérifie que le formulaire est correctement rempli
  */
  function checkForm() {
-  return domElements.dataForm.title.value.trim() !== "" && domElements.categorySelect.value !== "";
+  return domElements.dataForm.title.value.trim() !== "" && domElements.categorySelect.value !== "" && domElements.inputPhotoFile.files.length > 0;
 }
-
-/**
- *@description Créé un objet `FormData` à partir du formulaire
- */
-function createFormData() {
-  const formData = new FormData();
-  formData.append("title", domElements.dataForm.title.value);
-  formData.append("category", domElements.categorySelect.value);
-  formData.append("image", domElements.photoFile.files[0]);
-  return formData;
-}
-
 
 function validateForm() {
   if (checkForm()) {
     formData = new FormData();
     formData.append("title", domElements.title.value);
     formData.append("category", domElements.categorySelect.value);
-    formData.append("image", domElements.photoFile.files[0]);
+    formData.append("image", domElements.inputPhotoFile.files[0]);
     return true;
   } else {
     alert("Veuillez remplir tous les champs");
     return false;
+  }
+}
+
+/**
+ *@description Créé un objet `FormData` à partir du formulaire
+ */
+ function createFormData() {
+  const formData = new FormData();
+  formData.append("title", domElements.dataForm.title.value);
+  formData.append("category", domElements.categorySelect.value);
+  formData.append("image", domElements.inputPhotoFile.files[0]);
+  return formData;
+}
+
+function activeModaleBtnSubmit() {
+  if (validateForm()) {
+    domElements.submitBtn.disabled = false;
+  } else {
+    domElements.submitBtn.disabled = true;
   }
 }
 
@@ -340,7 +355,7 @@ function submitForm() {
   domElements.dataForm.addEventListener("submit", async (event) => {
     event.preventDefault();
     
-    if (!checkForm()) {
+    if (!validateForm()) {
       alert("Veuillez remplir tous les champs.");
       return;
     }
