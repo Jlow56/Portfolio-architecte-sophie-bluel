@@ -1,8 +1,9 @@
-import { getWorks } from "./works.js";
+import { displayWorks, getWorks } from "./works.js";
 import { getCategories } from "./buttons.js";
 
 document.addEventListener("DOMContentLoaded", async () => {
   await initializeApp();
+  
 });
 
 /*** Centralisation des sélections DOM ***/
@@ -34,9 +35,16 @@ const domElements = {
   // form2
   modaleForm: document.querySelector(".modale-form-container"), /*div qui contient le 2ème form modale 2*/
   dataForm: document.querySelector(".data-form"), /*form modale 2*/ 
+  titleInput: document.querySelector("#title"), /*input title modale 2*/
   categorySelect: document.querySelector("#category"),  /*select modale 2*/
+  submitModalBtn: document.querySelector(".btn-submit-modal-form"), /*bouton submit modale 2*/
+
 };
 
+/**
+ * @description Initialisation de l'application
+ * @returns {void}
+ */
 async function initializeApp() {
   let works = await getWorks();
   let categories = await getCategories();
@@ -48,10 +56,13 @@ async function initializeApp() {
   deleteWorkOnClick();
   backToModale1();
   previewPicture();
+  updateSubmitButton();
+  submitForm();
+  
 }
 
 /**
- *  @description Fonction qui permet de savoir si l'utilisateur est connecté si token dans localStorage
+ *  @description Fonction qui permet de savoir si l'utilisateur est connecté si le token est present token dans localStorage
  *  @returns {boolean}
  */
 export function isUserAuthenticated() {
@@ -60,7 +71,7 @@ export function isUserAuthenticated() {
 
 /************ Activer/Créer les liens d'édition si l'utilisateur est connecté via token dans localStorage ************/
 /***
- * @description Activer/Créer les liens d'édition si l'utilisateur est connecté via token dans localStorage
+ * @description Activer/Créer les liens d'édition si l'utilisateur est connecté 
  * @returns {void}
  */
 function activeHeaderLinksEdit() {
@@ -192,13 +203,15 @@ async function displayModaleGallery() {
 
 async function deleteWork(workId) {
   try {
-    await fetch(`http://localhost:5678/api/works/${workId}`, {
+    const response =await fetch(`http://localhost:5678/api/works/${workId}`, {
       method: "DELETE",
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
     });
     if (response.ok) {
-      displayModaleGallery(works);
-      console.log("Work deleted successfully");
+      let works = await getWorks();
+      displayModaleGallery();
+      displayWorks(works);
+      alert("Work deleted successfully");
     };
   } catch (error) {
     console.error(error);
@@ -228,7 +241,6 @@ function backToModale1() {
   document.querySelector(".back").addEventListener("click", () => {
     displayModale(domElements.modale1);
     closeModale(domElements.modale2);
-    emptyTheForm();
     resetForm();
   });
 }
@@ -285,7 +297,7 @@ function validateImage(file) {
 async function displayOptions() {
   let categories = await getCategories();
   domElements.categorySelect.innerHTML = `<option value="default"></option>` + 
-  categories.map(category => `<option value="${category.name}">${category.name}</option>`).join("");
+  categories.map(category => `<option value="${category.id}">${category.name}</option>`);
 }
 
 /**
@@ -295,87 +307,88 @@ function resetForm() {
   if (domElements.dataForm) domElements.dataForm.reset();
   if (domElements.addPhotoForm) domElements.addPhotoForm.reset();
   if (domElements.categorySelect) domElements.categorySelect.value = "default";
-  if (domElements.imgIcone) domElements.imgIcone.innerHTML = '<i class="fa-solid fa-image"></i>';
+
+  if (domElements.imgIcone) {
+    domElements.imgIcone.innerHTML = '<i class="fa-solid fa-image"></i>';
+    domElements.imgIcone.style.display = "flex";
+  }
 
   if (domElements.divPhotoContainer) domElements.divPhotoContainer.style.display = "none";
+  
   if  (domElements.imgPrewiew) {
-    domElements.imgPrewiew.remove();
+    domElements.imgPrewiew.remove(); 
     domElements.imgPrewiew.removeAttribute("src");
   }
-  
 
-  if (domElements.imgIcone) domElements.imgIcone.style.display = "flex";
   if (domElements.addPhotoForm) domElements.addPhotoForm.style.display = "flex";
   if (domElements.pictureFormat) domElements.pictureFormat.style.display = "flex";
 }
 
 /**
- *@description Vérifie que le formulaire est correctement rempli
+ * @description Vérifie que le formulaire est correctement rempli
  */
- function checkForm() {
-  return domElements.dataForm.title.value.trim() !== "" && domElements.categorySelect.value !== "" && domElements.inputPhotoFile.files.length > 0;
-}
-
-function validateForm() {
-  if (checkForm()) {
-    formData = new FormData();
-    formData.append("title", domElements.title.value);
-    formData.append("category", domElements.categorySelect.value);
-    formData.append("image", domElements.inputPhotoFile.files[0]);
-    return true;
-  } else {
-    alert("Veuillez remplir tous les champs");
-    return false;
-  }
+function checkForm() {
+  addEventListener("change", updateSubmitButton);
+  return (
+    domElements.titleInput.value.trim() !== "" && domElements.categorySelect.value !== "default" && domElements.inputPhotoFile.files.length > 0
+    );
 }
 
 /**
- *@description Créé un objet `FormData` à partir du formulaire
+ * @description Créé un objet `FormData` à partir du formulaire
  */
- function createFormData() {
+function createFormData() {
   const formData = new FormData();
-  formData.append("title", domElements.dataForm.title.value);
-  formData.append("category", domElements.categorySelect.value);
   formData.append("image", domElements.inputPhotoFile.files[0]);
+  formData.append("title", domElements.titleInput.value);
+  formData.append("category", domElements.categorySelect.value);
+  
+  for (const [key, value] of formData.entries()) {
+    console.log(key, value);
+  }
   return formData;
 }
 
-function activeModaleBtnSubmit() {
-  if (validateForm()) {
-    domElements.submitBtn.disabled = false;
-  } else {
-    domElements.submitBtn.disabled = true;
-  }
+
+function updateSubmitButton() {
+  const isValid = checkForm();
+  domElements.submitModalBtn.disabled = !isValid;
+  domElements.submitModalBtn.style.cursor = isValid ? "pointer" : "not-allowed";
+  // Ajoute la classe "btn-green-white" si valide, sinon l'enlève
+  domElements.submitModalBtn.classList.toggle("btn-green-white", isValid);
+  // Ajoute la classe "btn-disabled" si non valide, sinon l'enlève
+  domElements.submitModalBtn.classList.toggle("btn-disabled", !isValid);
 }
 
-/**
- * Gère la soumission du formulaire
- */
-function submitForm() {
-  domElements.dataForm.addEventListener("submit", async (event) => {
-    event.preventDefault();
-    
-    if (!validateForm()) {
-      alert("Veuillez remplir tous les champs.");
-      return;
-    }
-
-    const formData = createFormData();
-    
-    let response = await fetch(`${url}/works`, {
+async function submitHandler(event) {
+  event.preventDefault();
+  if (!checkForm()) {
+    alert("Veuillez remplir tous les champs.");
+    return;
+  }
+  const formData = createFormData();
+  try {
+    let response = await fetch(`http://localhost:5678/api/works`, {
       method: "POST",
-      headers: {
-        Authorization: "Bearer " + token,
-      },
+      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       body: formData,
     });
-
     if (response.ok) {
-      console.log("Work created successfully");
+      let works = await getWorks();
+      alert("Work created successfully");
       resetForm();
       await displayModaleGallery();
+      displayWorks(works);
     } else {
       alert("Erreur lors de l'envoi du formulaire.");
     }
-  });
+  } catch (error) {
+    console.error("Erreur réseau :", error);
+    alert("Problème de connexion au serveur.");
+  }
+}
+
+async function submitForm() {
+  domElements.submitModalBtn.removeEventListener("click", submitHandler);
+  domElements.submitModalBtn.addEventListener("click", submitHandler);
 }
