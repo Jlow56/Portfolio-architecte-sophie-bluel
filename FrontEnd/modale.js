@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 /*** Centralisation des sélections DOM ***/
 const domElements = {
   /*** Boutons ouvrir modales1 ***/
-  btnModale1: document.querySelector(".btn-open-modale1"), /*bouton ouvrir modale 1*/
+  btnOpenModale1: document.querySelector(".btn-open-modale1"), /*bouton ouvrir modale 1*/
   // ***Header***//
   btnEdit: document.querySelector(".edit-header"), /*div contenant le lien d'édition dans le header  pour ouvrir la modale créé en js*/
   // ***Main Portfolio***//
@@ -111,10 +111,10 @@ function hiddenModalesSection() {
  * @returns {void}
  */
 function displayModale(modale) {
-  domElements.modales.removeAttribute("aria-hidden");
-  modale.removeAttribute("aria-hidden");
-  modale.setAttribute("aria-modal", "true");
   modale.style.display = "flex";
+  modale.removeAttribute("inert"); // Active la modale
+  modale.setAttribute("aria-modal", "true");
+  modale.focus(); // Déplace le focus sur la modale
 }
 
 /***
@@ -122,10 +122,22 @@ function displayModale(modale) {
  * @returns {void}
  */
 function closeModale(modale) {
-  domElements.modales.setAttribute("aria-hidden", "true");
+  if (!modale) return;
+
+  // Déplacer le focus sur un bouton visible, sinon sur le body
+  const focusTarget = domElements.btnOpenModale1 || document.body;
+  focusTarget.focus();
+
+  // Désactive la modale
+  modale.setAttribute("inert", "true");
   modale.removeAttribute("aria-modal");
-  modale.setAttribute("aria-hidden", "true");
   modale.style.display = "none";
+
+  // Vérifie si toutes les modales sont fermées avant de masquer la section
+  if (!domElements.modale1.style.display.includes("flex") &&
+      !domElements.modale2.style.display.includes("flex")) {
+    domElements.modales.style.display = "none";
+  }
 }
 
 /************* Gestion du clic Ouverture/Fermeture des modals ************/
@@ -139,13 +151,20 @@ function openModalesOnClick() {
       event.preventDefault();
       displayModalesSection();
       displayModale(domElements.modale1);
-      closeModale(domElements.modale2); // Ferme la modale 2 si elle était ouverte
+
+      // Vérifie avant de fermer l'autre modale
+      if (domElements.modale2.style.display === "flex") {
+        closeModale(domElements.modale2);
+      }
     }
-    
+
     if (event.target.closest(".btn-open-modale2")) {
       event.preventDefault();
       displayModale(domElements.modale2);
-      closeModale(domElements.modale1); // Ferme la modale 1
+
+      if (domElements.modale1.style.display === "flex") {
+        closeModale(domElements.modale1);
+      }
     }
   });
 }
@@ -158,19 +177,18 @@ function closeModalesOnClick() {
   document.addEventListener("click", (event) => {
     if (event.target.closest(".close-modale") || event.target.classList.contains("modale")) {
       event.preventDefault();
-      closeModale(domElements.modale1, domElements.modale2);
-      hiddenModalesSection();
+      closeModale(domElements.modale1);
+      closeModale(domElements.modale2);
       resetForm();
-      
     }
   });
+
   window.addEventListener("keydown", function (e) {
     if (e.key === "Escape" || e.key === "Esc") {
-      closeModale(domElements.modale1, domElements.modale2);
-      hiddenModalesSection();
-      resetForm()
+      closeModale(domElements.modale1);
+      closeModale(domElements.modale2);
+      resetForm();
     }
-   
   });
 }
 

@@ -232,6 +232,11 @@ a.btn-open-modale {
 	color: white;
 }
 
+.btn-filters button:focus {
+	background-color: #1D6154;
+	color: white;
+  }
+
 .fa-solid .fa-pen-to-square {
 	color: #000000;
 }
