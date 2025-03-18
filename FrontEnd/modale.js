@@ -1,12 +1,33 @@
 import { displayWorks, getWorks } from "./works.js";
 import { getCategories } from "./buttons.js";
 
-document.addEventListener("DOMContentLoaded", async () => {
-  await initializeApp();
-  
+document.addEventListener("DOMContentLoaded", async function() {
+  initializeApp();
 });
 
 /*** Centralisation des sélections DOM ***/
+/**
+ * @description Contient les éléments DOM utilisés dans le script modale.js
+ * @property {HTMLElement} btnOpenModale1 - Bouton pour ouvrir la première modale
+ * @property {HTMLElement} btnEdit - Div contenant le lien d'édition dans le header pour ouvrir la modale créée en JavaScript
+ * @property {HTMLElement} divTitle - Div contenant le lien d'édition avec le titre h2 "mes projets" pour ouvrir la modale créée en JavaScript
+ * @property {HTMLElement} modales - Section contenant les modales
+ * @property {HTMLElement} modale1 - Élément aside de la première modale
+ * @property {HTMLElement} galleryModale - Galerie photo de la première modale
+ * @property {HTMLElement} modale2 - Élément aside de la deuxième modale
+ * @property {HTMLElement} imgIcone - Icône image lorsqu'une image n'est pas choisie dans la deuxième modale
+ * @property {HTMLElement} pictureFormat - Paragraphe indiquant le format de la photo dans la deuxième modale
+ * @property {HTMLElement} imgPrewiew - Image de prévisualisation dans la deuxième modale
+ * @property {HTMLElement} divPhotoContainer - Div contenant la photo en prévisualisation dans la deuxième modale
+ * @property {HTMLElement} addPhotoForm - Formulaire pour ajouter une photo dans la deuxième modale
+ * @property {HTMLElement} inputPhotoFile - Input file pour ajouter une photo dans la deuxième modale
+ * @property {HTMLElement} labelFile - Label pour ajouter une photo dans la deuxième modale
+ * @property {HTMLElement} modaleForm - Div contenant le deuxième formulaire dans la deuxième modale
+ * @property {HTMLElement} dataForm - Deuxième formulaire dans la deuxième modale
+ * @property {HTMLElement} titleInput - Input pour le titre dans la deuxième modale
+ * @property {HTMLElement} categorySelect - Select pour la catégorie dans la deuxième modale
+ * @property {HTMLElement} submitModalBtn - Bouton de soumission du formulaire dans la deuxième modale
+ */
 const domElements = {
   /*** Boutons ouvrir modales1 ***/
   btnOpenModale1: document.querySelector(".btn-open-modale1"), /*bouton ouvrir modale 1*/
@@ -71,7 +92,7 @@ export function isUserAuthenticated() {
 
 /************ Activer/Créer les liens d'édition si l'utilisateur est connecté via token dans localStorage ************/
 /***
- * @description Activer/Créer les liens d'édition si l'utilisateur est connecté 
+ * @description Activer/Créer les liens d'édition si l'utilisateur n'est pas connecté les cacher si l'utilisateur n'est pas connecté, si l'utilisateur est connecté, le lien d'édition est créé et ajouté au DOM en utilisant display: flex 
  * @returns {void}
  */
 function activeHeaderLinksEdit() {
@@ -98,16 +119,9 @@ function displayModalesSection() {
   domElements.modales.style.display = "flex";
 }
 
-/**
- * @description Masquer la section des modals avec display: none
- * @returns {void}
- */
-function hiddenModalesSection() {
-  domElements.modales.style.display = "none";
-}
-
 /***
- * @description Afficher les modals
+ * @description Afficher les modals en utilisant display: flex et aria-modal 
+ * @param {HTMLElement} modale - La modale à afficher
  * @returns {void}
  */
 function displayModale(modale) {
@@ -118,7 +132,8 @@ function displayModale(modale) {
 }
 
 /***
- * @description Fermer les modals
+ * @description Fermer les modals en utilisant display: none et inert includes sert pour savoir si la modale est en display flex si "non" il ferme la section des modales en display none
+ * @param {HTMLElement} modale - La modale à fermer
  * @returns {void}
  */
 function closeModale(modale) {

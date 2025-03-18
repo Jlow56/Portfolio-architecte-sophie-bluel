@@ -2,7 +2,6 @@
    v2.0 | 20110126
    License: none (public domain)
 */
-
 html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
 a, abbr, acronym, address, big, cite, code,
@@ -46,7 +45,6 @@ table {
 	border-collapse: collapse;
 	border-spacing: 0;
 }
-/** end reset css**/
 
 /************ global ************/
 body {
@@ -132,12 +130,6 @@ header {
 	justify-content: space-between;
 }
 
-/* .header-title-nav {
-    display: flex;
-    justify-content: space-between;
-    padding: 30px 120px;
-} */
-
 .header-title-nav {
     display: flex;
 	flex-direction: row;
@@ -168,6 +160,7 @@ main {
 #introduction figure {
 	flex: 1
 }
+
 #introduction img {
 	display: block;
 
@@ -177,6 +170,7 @@ main {
 #introduction article {
 	flex: 1
 }
+
 #introduction h2 {
 	margin-bottom: 1em;
 }
@@ -199,12 +193,6 @@ main {
     flex-direction: row;
     align-items: center;
 	gap: 30px;
-}
-
-a.btn-open-modale {
-    gap: 8px;
-    display: flex;
-    align-items: center;
 }
 
 .btn-filters {
@@ -354,6 +342,7 @@ div.modale-wrapper {
 
 i.fa-solid.fa-arrow-left.back {
     font-size: 21px;
+	color: #000000;
 }
 
 i.fa-solid.fa-xmark.close-modale {
@@ -372,7 +361,6 @@ i.fa-solid.fa-xmark.close-modale {
 }
 
 /*-- Header --*/
-
 .edit-header{
 	justify-content: center;
 	align-items: center;
@@ -446,8 +434,6 @@ i.fa-sharp.fa-solid.fa-trash-can {
 	padding-bottom: 0.5px;
 }
 
-
-
 .h2-modale {
 	display: flex;
 	justify-content: center;
@@ -471,14 +457,12 @@ i.fa-sharp.fa-solid.fa-trash-can {
 	align-items: center;
 }
 
-.fa-solid fa-arrow-left {
-	color: #000000;
-}
 
 /*main*/
 .main-modale {
     height: 70%;
 }
+
 .add-photo {	
 	width: 420px;
 	height: 169px;
@@ -598,7 +582,6 @@ footer {
 	height: 60px;
 }
 
-
 footer nav ul {
 	display: flex;
 	justify-content: flex-end;
@@ -618,7 +601,6 @@ main.main-login {
     align-items: center;
 }
 
-
 .login{
 	display: flex;
 	flex-direction: column;
@@ -626,6 +608,7 @@ main.main-login {
 	align-items: center;
 	
 }
+
 .form-login {
     display: flex;
     flex-direction: column;

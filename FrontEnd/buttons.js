@@ -6,6 +6,10 @@ document.addEventListener("DOMContentLoaded", async () => {
 });
 
 /************ Initialisation ************/
+/**
+ * @description Fonction d'initialisation
+ * @returns {void}
+ */
 async function init() {
   let categories = await getCategories();
   displayButtons(categories); // Génère dynamiquement les boutons de filtres
@@ -15,6 +19,10 @@ async function init() {
 }
 
 /************ Récupérer les catégories ************/
+/**
+ * @description Récupère les catégories depuis l'API
+ * @returns {Promise<Array>} categories
+ */
 export async function getCategories() {
   const response = await fetch("http://localhost:5678/api/categories");
   let categories = await response.json();
@@ -22,6 +30,11 @@ export async function getCategories() {
 }
 
 /************ Nettoyer le nom de la catégorie ************/
+/**
+ * @description Nettoie le nom de la catégorie 
+ * @param {string} name
+ * @returns {string} nom de la classe CSS
+ */
 export function regexFilter(name) {
   return `btn-${name
     .replace(/\s+/g, "-") // Remplace les espaces par des tirets
@@ -30,6 +43,11 @@ export function regexFilter(name) {
 }
 
 /************ Création d'un bouton des filtres ************/
+/**
+ * @description Crée un bouton de filtre pour les catégories de travaux et l'ajoute au DOM, regexFilter() est utilisé pour nettoyer le nom de la catégorie
+ * @param {*} categorie 
+ * @returns 
+ */
 function createBtn(categorie) {
   const btn = document.createElement("button");
   btn.classList.add(regexFilter(categorie.name));
@@ -38,6 +56,10 @@ function createBtn(categorie) {
 }
 
 /************ Mettre à jour le lien de connexion/déconnexion ************/
+/**
+ * @description Met à jour le lien de connexion/déconnexion si l'utilisateur est authentifié, si l'utilisateur est authentifié, le lien de connexion est remplacé par un lien de déconnexion qui supprime le token de l'utilisateur
+ * @returns {void}
+ */ 
 function updateLoginLogoutLink() {
   const loginLink = document.querySelector('nav ul li a[href="login.html"]');
   if (isUserAuthenticated()) {
@@ -55,6 +77,10 @@ function updateLoginLogoutLink() {
 }
 
 /************ Gérer les événements des boutons filters ************/
+/**
+ * @description Ajoute les événements aux boutons de filtres pour les catégories de travaux et filtre les travaux en fonction de la catégorie sélectionnée ou affiche tous les travaux si "Tous" par défaut 
+ * @returns {void}
+ */
 async function btnFiltersEvents() {
   if (!isUserAuthenticated()) {
     const categories = await getCategories();
@@ -75,6 +101,11 @@ async function btnFiltersEvents() {
 }
 
 /************ Filtrer les travaux en fonction des catégories sélectionnées ************/
+/**
+ * @description Filtre les travaux en fonction de la catégorie sélectionnée, si "Tous" est sélectionné, tous les travaux sont affichés sans filtre de catégorie sinon les travaux sont filtrés en fonction de la catégorie sélectionnée
+ * @param {string} categoryName
+ * @returns {void}
+ */
 async function filterWorks(categoryName) {
   let works = await getWorks(); // Récupère les travaux
   if (categoryName !== "Tous") {
@@ -84,6 +115,11 @@ async function filterWorks(categoryName) {
 }
 
 /************ Afficher les boutons ************/
+/**
+ * @description Génère dynamiquement les boutons de filtres pour les catégories de travaux et l'ajoute au DOM 
+ * @param {Array} categories
+ * @returns {void}
+ */
 function displayButtons(categories) {
   if (!isUserAuthenticated()) {
     const divBtnFilter = document.querySelector(".btn-filters");
