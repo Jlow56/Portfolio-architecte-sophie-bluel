@@ -46,7 +46,7 @@ export function regexFilter(name) {
 /**
  * @description Crée un bouton de filtre pour les catégories de travaux et l'ajoute au DOM, regexFilter() est utilisé pour nettoyer le nom de la catégorie
  * @param {*} categorie 
- * @returns 
+ * @returns {HTMLElement} btn
  */
 function createBtn(categorie) {
   const btn = document.createElement("button");

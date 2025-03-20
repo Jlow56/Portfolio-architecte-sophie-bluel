@@ -209,7 +209,7 @@ function closeModalesOnClick() {
 
 /************ modal 1  ************/
 /**
- * @description Create a gallery item for the modal
+ * @description Créer un élément HTML pour chaque travail dans la galerie modale
  * @param {Object} work - The work object containing image details
  * @returns {string} - The HTML string for the gallery item
  */
@@ -224,8 +224,8 @@ function createModaleGallery(work) {
 }
 
 /**
- * @description  
- * @returns 
+ * @description Afficher la galerie modale en récupérant les travaux et en créant les éléments HTML pour chaques travaux  
+ * @returns {void}
  */
 async function displayModaleGallery() {
   let works = await getWorks();
@@ -234,6 +234,11 @@ async function displayModaleGallery() {
   deleteWorkOnClick();
 }
 
+/**
+ * @description Supprimer un travail avec la methode DELETE en envoyant le token pour authentifier l'utilisateur  et mettre à jour la galerie modale, afficher un message de confirmation
+ * @param {string} workId - L'ID du travail
+ * @returns {void}
+ */
 async function deleteWork(workId) {
   try {
     const response =await fetch(`http://localhost:5678/api/works/${workId}`, {
@@ -252,7 +257,7 @@ async function deleteWork(workId) {
 }
 
 /**
- * Gestion du clic sur l'icone de suppression
+ * @description Gestion du clic sur l'icone de suppression, suppression du travail en fonction de son ID et mise à jour de la galerie modale 
  * @param {string} workId - L'ID du travail
  * @returns {void}
  */
@@ -279,9 +284,9 @@ function backToModale1() {
 }
 
 /**
- * @description Fonction pour prévisualiser l'image sélectionnée
+ * @description Fonction pour prévisualiser l'image sélectionnée, vérifier le format et la taille de l'image   
  * @param {string} workId - L'ID du travail
- * @returns {void}
+ * @returns {void} 
  */
 function previewPicture() {
   domElements.inputPhotoFile.addEventListener("change", () => {
@@ -308,7 +313,9 @@ function previewPicture() {
 }
 
 /**
- * Vérifie que le fichier est une image valide (JPEG/PNG, < 4 Mo)
+ * @description Vérifie que le fichier est une image valide (JPEG/PNG, < 4 Mo) et affiche un message d'erreur sinon pour l'utilisateur
+ * @param {File} file - Le fichier à verifier
+ * @returns {boolean} - Retourne `true` si le fichier est valide, sinon `false`. 
  */
 function validateImage(file) {
   const maxFileSize = 4 * 1024 * 1024; // 4 Mo
@@ -324,8 +331,8 @@ function validateImage(file) {
 }
 
 /**
- * 
- * @returns 
+ * @description Récupère les catégories pour les options du formulaire
+ * @returns {void}
  */
 async function displayOptions() {
   let categories = await getCategories();
@@ -334,7 +341,8 @@ async function displayOptions() {
 }
 
 /**
- * @description Réinitialise le formulaire
+ * @description Réinitialise le formulaire de la modale 2 
+ * @returns {void}
  */
 function resetForm() {
   if (domElements.dataForm) domElements.dataForm.reset();
@@ -358,7 +366,8 @@ function resetForm() {
 }
 
 /**
- * @description Vérifie que le formulaire est correctement rempli
+ * @description Vérifie que le formulaire est correctement remplit pour activer le bouton de soumission
+ * @returns {boolean} 
  */
 function checkForm() {
   addEventListener("change", updateSubmitButton);
@@ -368,7 +377,8 @@ function checkForm() {
 }
 
 /**
- * @description Créé un objet `FormData` à partir du formulaire
+ * @description Créé un objet `FormData` à partir du formulaire pour l'envoi au serveur 
+ * @returns {FormData}
  */
 function createFormData() {
   const formData = new FormData();
@@ -382,7 +392,10 @@ function createFormData() {
   return formData;
 }
 
-
+/**
+ * @description Met à jour le bouton de soumission du formulaire avec toggle en fonction de la validité du formulaire 
+ * @returns {void}
+ */
 function updateSubmitButton() {
   const isValid = checkForm();
   domElements.submitModalBtn.disabled = !isValid;
@@ -393,6 +406,11 @@ function updateSubmitButton() {
   domElements.submitModalBtn.classList.toggle("btn-disabled", !isValid);
 }
 
+/** 
+ * @description Gestion de la soumission du formulaire : envoi des données au serveur, récupération des travaux et affichage de la galerie modale 
+ * @param {Event} event - L'événement de soumission du formulaire
+ * @returns {void}
+ */
 async function submitHandler(event) {
   event.preventDefault();
   if (!checkForm()) {
@@ -421,6 +439,10 @@ async function submitHandler(event) {
   }
 }
 
+/**
+ * @description Ajoute un écouteur d'événement sur le bouton de soumission du formulaire
+ * @returns {void}
+ */
 async function submitForm() {
   domElements.submitModalBtn.removeEventListener("click", submitHandler);
   domElements.submitModalBtn.addEventListener("click", submitHandler);

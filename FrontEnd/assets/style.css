@@ -609,6 +609,15 @@ main.main-login {
 	
 }
 
+.error-message {
+	color: red;
+	font-size: 14px;
+	font-weight: 400;
+	font-family: Work Sans;
+	line-height: 16.42px;
+	padding-top: 30px;
+}
+
 .form-login {
     display: flex;
     flex-direction: column;
