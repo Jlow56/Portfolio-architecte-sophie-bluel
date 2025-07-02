@@ -1,4 +1,4 @@
-// FrontEnd/js/works.js
+// FrontEnd/works.js
 import { getWorksAPI } from './api.js';
 
 /************ Lancement du code ************/

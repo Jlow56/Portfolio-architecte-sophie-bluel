@@ -1,4 +1,4 @@
-// FrontEnd/js/buttons.js
+// FrontEnd/buttons.js
 import { getCategoriesAPI } from './api.js';
 import { displayWorks } from './works.js';
 

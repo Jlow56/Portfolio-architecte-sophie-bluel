@@ -1,4 +1,4 @@
-// FrontEnd/js/modale.js
+// FrontEnd/modale.js
 import { getWorksAPI, deleteWorkAPI, createWorkAPI } from './api.js';
 import { displayWorks } from './works.js';
 import { getCategoriesAPI } from './api.js';

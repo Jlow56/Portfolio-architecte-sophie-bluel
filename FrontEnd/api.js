@@ -1,7 +1,5 @@
-// FrontEnd/js/api.js
-export const API_URL =
-  import.meta.env.VITE_API_URL ||
-  'https://portfolio-architecte-sophie-bluel-cx5e.onrender.com'; // URL de votre API Render
+// FrontEnd/api.js
+import { API_URL } from './config.js';
 
 /**
  * Récupère tous les works
