@@ -64,6 +64,8 @@ const domElements = {
 
 /**
  * @description Initialisation de l'application
+ * @async
+ * @function initializeApp 
  * @returns {void}
  */
 async function initializeApp() {
@@ -78,8 +80,7 @@ async function initializeApp() {
   backToModale1();
   previewPicture();
   updateSubmitButton();
-  submitForm();
-  
+  submitForm(); 
 }
 
 /**
@@ -303,6 +304,7 @@ function previewPicture() {
       domElements.imgIcone.style.display = "none";
       domElements.addPhotoForm.style.display = "none";
       domElements.pictureFormat.style.display = "none";
+     
       const img = document.createElement("img");
       img.src = reader.result;
       img.classList.add("img-preview");

@@ -49,7 +49,7 @@ async function authPost(email, password) {
   try {
     const response = await fetch("http://localhost:5678/api/users/login", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: { "Content-Type": "application/json" }, // En-tête de la requête POST pour spécifier le format JSON dans le corps de la requête HTTP en utilisant le type MIME "application/json". 
       body: JSON.stringify({ email, password }),
     });
 

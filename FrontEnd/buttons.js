@@ -38,8 +38,8 @@ export async function getCategories() {
 export function regexFilter(name) {
   return `btn-${name
     .replace(/\s+/g, "-") // Remplace les espaces par des tirets
-    .replace(/[^a-zA-Z0-9-]/g, "") // Supprime caractères spéciaux sauf -
-    .toLowerCase()}`;
+    .replace(/[^a-zA-Z0-9-]/g, "") // Supprime caractères spéciaux, sauf - et lettres et chiffres 
+    .toLowerCase()}`; 
 }
 
 /************ Création d'un bouton des filtres ************/
