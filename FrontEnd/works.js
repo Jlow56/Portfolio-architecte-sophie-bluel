@@ -1,69 +1,73 @@
-/************ Lancement du code ************/
-// Attend que le DOM soit chargé et lance la fonction init
-/**
- * @description Attend que le DOM soit chargé et lance la fonction init
- * @param {Function} init - Fonction qui récupère les travaux depuis l'API ou le cache
- * @returns {void}
- */
-document.addEventListener("DOMContentLoaded", () => {
-  init();
+/************ Initialisation ************/
+document.addEventListener("DOMContentLoaded", async () => {
+  try {
+    // Ping du backend pour réveiller Render (évite erreur à froid)
+    await fetch("https://portfolio-architecte-sophie-bluel-cx5e.onrender.com/api/works", { method: "HEAD" });
+
+    // Lancement de l'initialisation après réveil
+    await init();
+  } catch (error) {
+    console.error("Erreur de connexion au backend :", error);
+
+    // Retente après 2 secondes si échec
+    setTimeout(() => {
+      console.warn("Nouvelle tentative de connexion...");
+      init();
+    }, 2000);
+  }
 });
 
-/************ Fonction qui initialise la page ************/
+/************ Fonction d'initialisation ************/
 async function init() {
-  let works = await getWorks(); 
-  displayWorks(works); 
+  try {
+    const works = await getWorks();
+    displayWorks(works);
+  } catch (error) {
+    console.error("Erreur lors du chargement des travaux :", error);
+    displayError("Impossible de charger les travaux pour le moment.");
+  }
 }
-  
-/************ Fonction qui récupère l'API des works ************/
-/***
- * @description Fonction qui récupère l'API des works 
- * @returns {Promise<Array>} works - Tableau d'objets
- */
+
+/************ Récupération des travaux via l'API ************/
 export async function getWorks() {
-  const response = await fetch("https://portfolio-architecte-sophie-bluel-cx5e.onrender.com/api/works"); 
-  let  works = await response.json();// Convertit la réponse en JSON (tableau d'objets)
+  const response = await fetch("https://portfolio-architecte-sophie-bluel-cx5e.onrender.com/api/works");
+  if (!response.ok) throw new Error(`Erreur HTTP ${response.status}`);
+  const works = await response.json();
   return works;
 }
-  
-/************ Fonction qui cree la structure de l'image ************/
-/***
- * @description Fonction qui cree la structure de l'image la figure avec la classe work et l'image avec comme url l'url de l'image et comme alt le titre de l'image
- * @param {Object} work - Objet contenant les données du travail
- * @returns {HTMLElement} figure - Element HTML de la figure
- */
+
+/************ Création d’un élément <figure> pour un travail ************/
 function createWork(work) {
   const figure = document.createElement("figure");
   figure.classList.add("work");
-  figure.innerHTML = `  
-  <img src="${work.imageUrl}" alt="${work.title}">
-  <figcaption>${work.title}</figcaption>`;
+  figure.innerHTML = `
+    <img src="${work.imageUrl}" alt="${work.title}">
+    <figcaption>${work.title}</figcaption>`;
   return figure;
 }
-  
-/************ Fonction qui affiche les travaux ************/
-/***
- * @description Fonction qui affiche les travaux dans la div gallery à partir de mon tableau works
- * @param {Array} works - Tableau d'objets
- * @returns {void}
- */
+
+/************ Affichage des travaux dans la galerie ************/
 export function displayWorks(works) {
   const divGallery = document.querySelector(".gallery");
-  divGallery.innerHTML = "";
-  // boucle pour afficher les travaux à partir de mon tableau works
-  works.forEach((work) => {
+  if (!divGallery) return;
+
+  divGallery.innerHTML = ""; // Nettoyage
+  works.forEach(work => {
     const figure = createWork(work);
     divGallery.appendChild(figure);
   });
 }
 
-/**
- * @description Fonction qui met à jour les travaux en appelant getWorks et displayWorks avec les nouvelles données
- * @returns {void}
- */
+/************ Mise à jour dynamique des travaux ************/
 export async function updateWorks() {
-  let works = await getWorks();
+  const works = await getWorks();
   displayWorks(works);
-} 
+}
 
+/************ Affichage d’un message d’erreur dans la page ************/
+function displayError(message) {
+  const gallery = document.querySelector(".gallery");
+  if (!gallery) return;
 
+  gallery.innerHTML = `<p style="color: red; text-align: center;">${message}</p>`;
+}
