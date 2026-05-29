@@ -2,19 +2,34 @@ const jwt = require('jsonwebtoken')
 
 module.exports = (req, res, next) => {
 	try {
-		console.log(req.headers.authorization);
-		const token = req.headers.authorization.split(' ')[1]
-		const decodedToken = jwt.verify(token, process.env.TOKEN_SECRET)
-		const userId = decodedToken.userId
-		req.auth = { userId }
-		if (req.body.userId && req.body.userId !== userId) {
-			throw 'Invalid user ID'
-		} else {
-			next()
+
+		const authHeader = req.headers.authorization
+
+		if (!authHeader || !authHeader.startsWith('Bearer ')) {
+			return res.status(401).json({
+				error: 'Authentication failed'
+			})
 		}
-	} catch {
-		res.status(401).json({
-			error: new Error('You are not authenticated')
+
+		const token = authHeader.split(' ')[1]
+
+		const decodedToken = jwt.verify(
+			token,
+			process.env.TOKEN_SECRET,
+			{
+				algorithms: ['HS256']
+			}
+		)
+
+		req.auth = {
+			userId: decodedToken.userId
+		}
+
+		next()
+
+	} catch (error) {
+		return res.status(401).json({
+			error: 'Invalid token'
 		})
 	}
 }
